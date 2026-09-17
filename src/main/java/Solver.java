@@ -26,32 +26,9 @@ public class Solver {
 
         LinkedTree<Pair<State, Boolean>> states;
         HashSet<String> dictionary;
-        static final Character[] ALPHABET = new Character[]{'a',
-                                                            'b',
-                                                            'c',
-                                                            'd',
-                                                            'e',
-                                                            'f',
-                                                            'g',
-                                                            'h',
-                                                            'i',
-                                                            'j',
-                                                            'k',
-                                                            'l',
-                                                            'm',
-                                                            'n',
-                                                            'o',
-                                                            'p',
-                                                            'q',
-                                                            'r',
-                                                            's',
-                                                            't',
-                                                            'u',
-                                                            'v',
-                                                            'w',
-                                                            'x',
-                                                            'y',
-                                                            'z',};
+        static final Character[] ALPHABET = new Character[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+                                                            'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+                                                            'y', 'z',};
 
         SolveState(State unsolved, HashSet<String> dictionary) {
             states = new LinkedTree<>(new Pair<State, Boolean>(unsolved, false));
@@ -74,8 +51,7 @@ public class Solver {
                             invalid = true;
                             break;
                         }
-                    }
-                    else {
+                    } else {
                         noUnmatched = false;
                     }
                 }
@@ -84,8 +60,7 @@ public class Solver {
                 }
                 if ((!invalid) && noUnmatched) {
                     return state;
-                }
-                else if (!invalid) {
+                } else if (!invalid) {
                     Map<Word, Set<Map<Integer, Character>>> wordOptions = stateDictOptions(state);
                     if (wordOptions.isEmpty()) {
                         throw new RuntimeException("No words present, despite the presence of Unmatched words");
@@ -116,8 +91,7 @@ public class Solver {
                         }
                         //system.out.println("going up");
                         states.up();
-                    }
-                    else {
+                    } else {
                         for (int i = 0; i < states.getChildren().size(); i++) {
                             if (!states.getChildren().get(i).getBack()) {
                                 //system.out.println("Going down");
@@ -150,8 +124,7 @@ public class Solver {
             for (Integer num : state.getKey().keySet()) {
                 if (previouslySeen.contains(state.getKey().get(num))) {
                     return true;
-                }
-                else {
+                } else {
                     previouslySeen.add(state.getKey().get(num));
                 }
             }
@@ -175,9 +148,9 @@ public class Solver {
         Map<Word, Set<Map<Integer, Character>>> stateDictOptions(State state) {
             Map<Word, Integer> unmatchedAmount = unmatchedAmountMap(state);
             Map<Word, Set<Map<Integer, Character>>> options = new HashMap<>();
-            int lowestBranches=Integer.MAX_VALUE;
+            int lowestBranches = Integer.MAX_VALUE;
             //TODO: Build out test suite and evaluate best values for constant
-            for (int i = 1; lowestBranches>=(5+(6*(i-1))); i++) {
+            for (int i = 1; lowestBranches >= (5 + (6 * (i - 1))); i++) {
                 Set<Word> checks = new HashSet<>();
                 for (Word word : unmatchedAmount.keySet()) {
                     int unmatched = unmatchedAmount.get(word);
@@ -193,14 +166,12 @@ public class Solver {
                     for (int num : word.getNumbers()) {
                         if (seen.containsKey(num)) {
                             base.append(seen.get(num));
-                        }
-                        else if (!state.getKey().containsKey(num)) {
+                        } else if (!state.getKey().containsKey(num)) {
                             base.append(count);
                             nums.add(num);
                             seen.put(num, count);
                             count++;
-                        }
-                        else {
+                        } else {
                             base.append(state.getKey().get(num));
                         }
                     }
@@ -209,8 +180,8 @@ public class Solver {
                         ret.put(Integer.toString(j).charAt(0), nums.get(j));
                     }
                     options.put(word, dictOptions(base.toString(), ret));
-                    if(options.get(word).size()<lowestBranches){
-                        lowestBranches=options.get(word).size();
+                    if (options.get(word).size() < lowestBranches) {
+                        lowestBranches = options.get(word).size();
                     }
                 }
             }
@@ -265,8 +236,7 @@ public class Solver {
                             if (i == pairedPlaceHolders.size() - 1) {
                                 end = true;
                             }
-                        }
-                        else {
+                        } else {
                             break;
                         }
                     }
